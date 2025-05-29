@@ -8,49 +8,66 @@ typedef struct No{
     struct No *anterior;
 } No;
 
+
 typedef struct Lista{
-    No *inicio;
-    No *fim;
+    No *primeiro;
+    No *ultimo;
 } Lista;
 
 
 void inserir(int valor, Lista *lista){
     No *no = (No*)malloc(sizeof(No));
-    no->valor = valor;
-    no->proximo = NULL;
-    if(lista->inicio == NULL){
-        lista->inicio = no;
-        lista->fim = no;
+    if(no){
+        no->valor = valor;
+        no->proximo = NULL;
+        
+        if(lista->primeiro == NULL){
+            lista->primeiro = no;
+            lista->ultimo = no;
+        }
+        else{
+            No *ultimo = lista->ultimo;
+            lista->ultimo->proximo = no;
+            no->anterior = ultimo;
+            lista->ultimo = no;
+        }
     }
     else{
-        no->anterior = lista->fim;
-        lista->fim->proximo = no;
-        lista->fim->anterior = no->anterior;
-        lista->fim = no;
+        printf("Erro na alocação de memória para o nó.\n");
+    }
+}
+
+
+void imprimir(Lista *lista){
+    if(lista->primeiro != NULL){
+        No *primeiro = lista->primeiro;
+        while(primeiro != NULL){
+            printf("%d\n", primeiro->valor);
+            primeiro = primeiro->proximo;
+        }
+    }
+    else{
+        printf("Não pode imprimir uma lista vazia.\n");
     }
 }
 
 
 void remover(Lista *lista){
-    No *anterior =  NULL;
-    No *inicio = lista->inicio;
-    No *fim = lista->fim;
-    lista->fim = lista->fim->anterior;
-    lista->fim->proximo = NULL;
-    while(inicio != lista->fim){
-        anterior = inicio;
-        inicio = inicio->proximo;
+    if(lista->primeiro != NULL){
+        No *anterior = NULL;
+        No *ultimo = lista->ultimo;
+        No *primeiro = lista->primeiro;
+        lista->ultimo = lista->ultimo->anterior;
+        lista->ultimo->proximo = NULL;
+        while(primeiro != lista->ultimo){
+            anterior = primeiro;
+            primeiro = primeiro->proximo;
+        }
+        lista->ultimo->anterior = anterior;
+        free(ultimo);
     }
-    lista->fim->anterior = anterior;
-    free(fim);
-}
-
-
-void imprimir(Lista *lista){
-    No *inicio = lista->inicio;
-    while(inicio != NULL){
-        printf("%d\n", inicio->valor);
-        inicio = inicio->proximo; 
+    else{
+        printf("A lista está vazia.\n");
     }
 }
 
@@ -58,30 +75,27 @@ void imprimir(Lista *lista){
 int main()
 {
     Lista *lista;
+    
+    lista->primeiro = NULL;
+    lista->ultimo = NULL;
+    
     int opcao, valor;
-    
-    lista->inicio = NULL;
-    lista->fim = NULL;
-    
     do{
-        printf("Escolha uma opção: 1 - Inserir 2 - Remover 3 - Imprimir: ");
+        printf("Escolha uma opção: ");
         scanf("%d", &opcao);
-        
         switch(opcao){
             case 1:
-                printf("Escolha um número: ");
+                printf("Digite um número: ");
                 scanf("%d", &valor);
                 inserir(valor, lista);
                 break;
             case 2:
-                remover(lista);
-                break;
-            case 3:
                 imprimir(lista);
                 break;
-            default:
-                printf("Opção inválida!\n");
+            case 3:
+                remover(lista);
                 break;
         }
-    } while(opcao != 4);
+    } while(opcao != 0);
+    return 0;
 }
