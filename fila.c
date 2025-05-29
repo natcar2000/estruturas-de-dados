@@ -7,50 +7,65 @@ typedef struct No{
     struct No *proximo;
 } No;
 
+
 typedef struct Fila{
-    struct No *fim;
-    struct No *inicio;
+    No *primeiro;
+    No *ultimo;
 } Fila;
 
 
-void inserir(int valor, Fila *fila){
+void enfileirar(int valor, Fila *fila){
     No *no = (No*)malloc(sizeof(No));
-    no->valor = valor;
-    no->proximo = NULL;
-    if(fila->inicio == NULL){
-        fila->fim = no;
-        fila->inicio = no;
+    if(no){
+        no->valor = valor;
+        no->proximo = NULL;
+        if(fila->primeiro == NULL){
+            fila->primeiro = no;
+            fila->ultimo = no;
+        }
+        else{
+            fila->ultimo->proximo = no;
+            fila->ultimo = no;
+        }
     }
     else{
-        fila->fim->proximo = no;
-        fila->fim = no;
+        printf("Erro na alocação de memória para o nó.\n");
     }
 }
 
 
-void remover(Fila *fila){
-    No *aux = fila->inicio;
-    fila->inicio = fila->inicio->proximo;
-    free(aux);
-};
-
-
 void imprimir(Fila *fila){
-    No *inicio = fila->inicio;
-    while(inicio != NULL){
-        printf("%d\n", inicio->valor);
-        inicio = inicio->proximo; 
+    if(fila->primeiro != NULL){
+        No *primeiro = fila->primeiro;
+        while(primeiro != NULL){
+            printf("%d\n", primeiro->valor);
+            primeiro = primeiro->proximo;
+        }
     }
-};
+    else{
+        printf("Não se pode imprimir uma fila vazia.\n");
+    }
+}
 
 
-int main()
-{
+void desenfileirar(Fila *fila){
+    if(fila->primeiro != NULL){
+        No *primeiro = fila->primeiro;
+        fila->primeiro = fila->primeiro->proximo;
+        free(primeiro);
+    }
+    else{
+        printf("A fila está vazia.\n");
+    }
+}
+
+
+int main(){
     Fila *fila;
     int opcao, valor;
     
-    fila->inicio = NULL;
-    fila->fim = NULL;
+    fila->primeiro = NULL;
+    fila->ultimo = NULL;
     
     do{
         printf("Escolha uma opção: 1 - Inserir 2 - Remover 3 - Imprimir: ");
@@ -60,17 +75,15 @@ int main()
             case 1:
                 printf("Escolha um número: ");
                 scanf("%d", &valor);
-                inserir(valor, fila);
+                enfileirar(valor, fila);
                 break;
             case 2:
-                remover(fila);
+                desenfileirar(fila);
                 break;
             case 3:
                 imprimir(fila);
                 break;
-            default:
-                printf("Opção inválida!");
-                break;
         }
-    } while(opcao != 4);
+    } while(opcao != 0);
+    return 0;
 }
