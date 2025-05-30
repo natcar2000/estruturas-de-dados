@@ -4,46 +4,60 @@
 
 typedef struct No{
     int valor;
-    struct No *proximo;
+    struct No *anterior;
 } No;
+
 
 typedef struct Pilha{
     No *topo;
 } Pilha;
 
 
-void inserir(int valor, Pilha *pilha){
+void empilhar(int valor, Pilha *pilha){
     No *no = (No*)malloc(sizeof(No));
-    no->valor = valor;
-    if(pilha->topo == NULL){
-        no->proximo = NULL;
-        pilha->topo = no;
+    if(no){
+        no->valor = valor;
+        if(pilha->topo == NULL){
+            pilha->topo = no;
+        }
+        else{
+            no->anterior = pilha->topo;
+            pilha->topo = no;
+        }
     }
     else{
-        no->proximo = pilha->topo;
-        pilha->topo = no;
+        printf("Erro na alocação de memória para o nó.\n");
     }
-}
-
-
-void remover(Pilha *pilha){
-    No *topo = pilha->topo;
-    pilha->topo = pilha->topo->proximo;
-    free(topo);
 }
 
 
 void imprimir(Pilha *pilha){
-    No *topo = pilha->topo;
-    while(topo != NULL){
-        printf("%d\n", topo->valor);
-        topo = topo->proximo; 
+    if(pilha->topo != NULL){
+        No *topo = pilha->topo;
+        while(topo != NULL){
+            printf("%d\n", topo->valor);
+            topo = topo->anterior;
+        }
+    }
+    else{
+        printf("Não se pode imprimir uma pilha vazia.\n");
     }
 }
 
 
-int main()
-{
+void desempilhar(Pilha *pilha){
+    if(pilha->topo != NULL){
+        No *topo = pilha->topo;
+        pilha->topo = pilha->topo->anterior;
+        free(topo);
+    }
+    else{
+        printf("A pilha está vazia.\n");
+    }
+}
+
+
+int main(){
     Pilha *pilha;
     int opcao, valor;
     
@@ -57,17 +71,15 @@ int main()
             case 1:
                 printf("Escolha um número: ");
                 scanf("%d", &valor);
-                inserir(valor, pilha);
+                empilhar(valor, pilha);
                 break;
             case 2:
-                remover(pilha);
+                desempilhar(pilha);
                 break;
             case 3:
                 imprimir(pilha);
                 break;
-            default:
-                printf("Opção inválida!\n");
-                break;
         }
-    } while(opcao != 4);
+    } while(opcao != 0);
+    return 0;
 }
