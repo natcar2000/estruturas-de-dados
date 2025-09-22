@@ -53,7 +53,11 @@ void imprimir(Lista *lista){
 
 
 void remover(Lista *lista){
-    if(lista->primeiro != NULL){
+    if(lista->primeiro == lista->ultimo){
+        lista->primeiro = NULL;
+        lista->ultimo = NULL;
+    }
+    else{
         No *anterior = NULL;
         No *ultimo = lista->ultimo;
         No *primeiro = lista->primeiro;
@@ -64,10 +68,6 @@ void remover(Lista *lista){
             primeiro = primeiro->proximo;
         }
         lista->ultimo->anterior = anterior;
-        free(ultimo);
-    }
-    else{
-        printf("A lista está vazia.\n");
     }
 }
 
