@@ -93,7 +93,12 @@ int main()
                 imprimir(lista);
                 break;
             case 3:
-                remover(lista);
+                if(lista->primeiro == NULL && lista->ultimo == NULL){
+                    printf("A lista está vazia.\n");
+                }
+                else{
+                    remover(lista);
+                }
                 break;
         }
     } while(opcao != 0);
