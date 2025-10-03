@@ -6,7 +6,6 @@ class Arvore(object):
 
 def buscar(chave, raiz):
     if chave == raiz.valor:
-        status = True
         return raiz
     else:
         for filho in raiz.filho:
