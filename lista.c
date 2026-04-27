@@ -27,7 +27,7 @@ void inserir(int valor, Lista *lista){
         no->valor = valor;
         no->proximo = NULL;
         no->anterior = lista->fim;
-        if (lista->inicio != NULL) {
+        if (lista->fim != NULL) {
             lista->fim->proximo = no;
         }
         else {
