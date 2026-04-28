@@ -1,6 +1,6 @@
 # Estruturas de dados
 
-Este projeto contém as principais estruturas de dados utilizadas em Ciências da Computação: listas, filas, pilhas, deques, árvores e grafos.
+Este projeto contém as principais estruturas de dados utilizadas em Ciências da Computação: listas, filas, pilhas, árvores e grafos.
 
 
 ## Authors
